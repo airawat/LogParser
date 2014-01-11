@@ -34,15 +34,11 @@ public class LogParser {
 	//b) Add the year as a field
 
 	
-	// gradle clean jar
-	// hadoop jar cascadingSamples/LogParserSampleCascading/jars/logparser-cascading.jar "cascadingSamples/data/syslogs/*/*/*/" "cascadingSamples/zOutput-LogParser1" "cascadingSamples/zOutput-LogParser1/traps" "cascadingSamples/zOutput-LogParser1/reports"
-	
 	public static void main(String[] args) {
 	
 	    // {{
 	    // INSTANTIATE/INITIALIZE
 		
-		// Set the current job jar
 	    Properties properties = new Properties();
 	    AppProps.setApplicationJarClass( properties, LogParser.class );
 	    
@@ -84,7 +80,7 @@ public class LogParser {
 	    // Declare the field names we will parse out of the log file
 	    Fields sysLogFields = new Fields( "month", "day", "time", "node", "process", "message" );
 
-	    // Define the regular expression to parse the log file with
+	    // Define the regex pattern
 	    String sysLogRegex = "(\\w+)\\s+(\\d+)\\s+(\\d+:\\d+:\\d+)\\s+(\\w+\\W*\\w*)\\s+(.*?\\:)\\s+(.*$)";
 	
 	    // Declare the groups from the above regex we want to keep. Each regex group will be given
@@ -95,9 +91,6 @@ public class LogParser {
 	    RegexParser parser = new RegexParser( sysLogFields, sysLogRegex, keepParsedGroups );
 
 	    // Import & parse pipe 
-	    // Create the import pipe element, with the name 'import', and with the input argument named "line"
-	    // Replace the incoming tuple with the parser results
-	    // "line" -> parser -> "ts"
 	    Pipe importAndParsePipe = new Each( "import", new Fields( "line" ), parser, Fields.RESULTS );
 	    // }}
 	    
